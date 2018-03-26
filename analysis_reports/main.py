@@ -88,6 +88,35 @@ def erstelle_input_meta_tex():
     pass
 
 
+def filter(texfile):
+    if "&" in texfile:
+        texfile = texfile.replace("&", "\&")
+
+    if "\r" in texfile:
+        texfile = texfile.replace("\r", "\\\r")
+
+    if "^" in texfile:
+        texfile = texfile.replace("^", "\string^")
+
+    if "_" in texfile:
+        texfile = texfile.replace("_", "\_")
+
+    if "\n\'" in texfile:
+        texfile = texfile.replace("\n\'", "")
+
+    if "#" in texfile:
+        texfile = texfile.replace("#", "\\#")
+
+    if "\\nchar" in texfile:
+        texfile = texfile.replace("\\nchar", "\\\\nchar")
+
+    if "\\nLSS" in texfile:
+        texfile = texfile.replace("\\nLSS", "\\\\nLSS")
+
+    if "\\@" in texfile:
+        texfile = texfile.replace("\\@", "\\\\@")
+
+    return texfile
 
 
 def erstelle_analyse():
