@@ -1,0 +1,61 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage[ansinew]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{verbatim}
+
+\begin{document}
+
+\title{FACT Firmware Analysis}
+
+\maketitle
+
+\section{Meta Daten}
+\input{meta.tex}
+
+\section{Analysis}
+
+\subsection{base64decoder}
+\input{base64decoder.tex}
+
+\subsection{cpu architecture}
+\input{cpuarchitecture.tex}
+
+\subsection{crypto material}
+\input{cryptomaterial.tex}
+
+\subsection{exploit mitigations}
+\input{exploitmitigations.tex}
+
+\subsection{file hashes}
+\input{filehashes.tex}
+
+\subsection{file type}
+\input{filetype.tex}
+
+\subsection{init systems}
+\input{initsystems.tex}
+
+\subsection{ip and uri finder}
+\input{ipandurifinder.tex}
+
+\subsection{software components}
+\input{softwarecomponents.tex}
+
+\subsection{printable strings}
+\input{printablestrings.tex}
+
+\subsection{users and passwords}
+\input{usersandpasswords.tex}
+
+\subsection{string evaluator}
+\input{stringevaluator.tex}
+
+\subsection{unpacker}
+\input{unpacker.tex}
+
+\subsection{malware scanner}
+\input{malwarescanner.tex}
+
+\end{document}
