@@ -1,0 +1,16 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage[ansinew]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{verbatim}
+
+\begin{document}
+
+\BLOCK{for x in analysis}
+\subsection{\VAR{x}}
+\input{\VAR{x}.tex}
+
+\BLOCK{endfor}
+
+\end{document}
