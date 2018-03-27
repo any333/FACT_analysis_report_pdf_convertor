@@ -1,0 +1,22 @@
+\begin{tabular}{|p{3cm}|p{10cm}|}
+    Time of Analysis & \VAR{analysis_date}\\
+
+    Plugin Version & \VAR{plugin_version}\\
+
+    Plugin & \VAR{element['plugin_used']}\\
+
+    Extracted & \VAR{element['number_of_unpacked_files']}\\
+
+    Output & \begin{verbatim}\VAR{element['output']}\end{verbatim}
+    \\
+
+    Size packed unpacked & \begin{verbatim}\VAR{element['size packed -> unpacked']}\end{verbatim}
+    \\
+
+    Entropy & \VAR{entropy}\\
+
+    Summary
+    \BLOCK{for data in summary}
+    & \VAR{data}\\
+    \BLOCK{endfor}
+\end{tabular}

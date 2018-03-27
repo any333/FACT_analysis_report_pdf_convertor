@@ -1,0 +1,25 @@
+\begin{tabular}{|p{3cm}|p{10cm}|}
+    Time of Analysis & \VAR{analysis_date}\\
+
+    Plugin Version & \VAR{plugin_version}\\
+
+    IPv4
+    \BLOCK{for ip in ips_v4}
+    & \VAR{ip}\\
+    \BLOCK{endfor}
+
+    IPv6
+    \BLOCK{for ip in ips_v6}
+    & \VAR{ip}\\
+    \BLOCK{endfor}
+
+    URI
+    \BLOCK{for uri in uris}
+    & \VAR{uri}\\
+    \BLOCK{endfor}
+
+    Summary
+    \BLOCK{for data in summary}
+    & \VAR{data}\\
+    \BLOCK{endfor}
+\end{tabular}

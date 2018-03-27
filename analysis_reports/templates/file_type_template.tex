@@ -1,3 +1,14 @@
-\BLOCK{for x in file}
-\begin{verbatim}\VAR{x} : \VAR{file[x]}\end{verbatim}\newline
-\BLOCK{endfor}
+\begin{tabular}{|p{3cm}|p{10cm}|}
+    Time of Analysis & \VAR{analysis_date}\\
+
+    Plugin Version & \VAR{plugin_version}\\
+
+    File Type & \VAR{element['full']}\\
+
+    MIME & \VAR{element['mime']}\\
+
+    Summary
+    \BLOCK{for data in summary}
+    & \VAR{data}\\
+    \BLOCK{endfor}
+\end{tabular}
