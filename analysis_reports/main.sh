@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Shellskript"
 
-python3 main.py
+python3 main.py b7c55a6de9fd1b85ec07f661b4d21638021999e2b1e754de1922f3b01f2cedb8_3378139
 pdflatex main.tex
 
 rm base64decoder.tex
