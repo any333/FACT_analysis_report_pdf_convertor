@@ -21,3 +21,4 @@ rm stringevaluator.tex
 rm printablestrings.tex
 rm unpacker.tex
 rm usersandpasswords.tex
+rm main.tex
