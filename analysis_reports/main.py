@@ -90,7 +90,7 @@ def comment_out_regex_meta_chars(input_data):
     return input_data
 
 
-def erstelle_haupttex():
+def create_main_tex():
     
     template = latex_jinja_env.get_template('templates/main_template.tex')
     #print(template.render(analysis=analysis))
@@ -101,7 +101,7 @@ def erstelle_haupttex():
     fh.close
     pass
 
-def erstelle_input_meta_tex():
+def create_meta_tex():
 
     size = byte_number_filter(meta_data['size'])
 
@@ -148,7 +148,7 @@ def filter(texfile):
     return texfile
 
 
-def erstelle_analyse():
+def create_analysis_texs():
 
     for cursor_analysis in analysis:
 
@@ -320,10 +320,15 @@ def erstelle_analyse():
             analysis_date = nice_unix_time(element['analysis_date'])
             plugin_version = element['plugin_version']
             strings = element['strings']
+            filtered_strings = []
+            for string in strings:
+                new_string = comment_out_regex_meta_chars(string)
+                filtered_strings.append(new_string)
+
 
             template = latex_jinja_env.get_template('templates/printable_strings_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, strings = strings)
+            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, strings = filtered_strings)
 
             fh = open("printablestrings.tex", 'w')
             fh.write(texfile)
@@ -417,7 +422,7 @@ def erstelle_analyse():
 
     pass
 
-erstelle_haupttex()
-erstelle_input_meta_tex()
-erstelle_analyse()
-print("done")
+create_main_tex()
+create_meta_tex()
+create_analysis_texs()
+print("All .tex Files successfully created.")
