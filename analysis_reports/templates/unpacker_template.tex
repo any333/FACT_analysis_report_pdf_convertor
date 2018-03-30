@@ -1,22 +1,26 @@
 \begin{tabular}{|p{3cm}|p{11.5cm}|}
-    Time of Analysis & \VAR{analysis_date | nice_unix_time}\\
-
-    Plugin Version & \VAR{plugin_version}\\
-
+    \hline
+    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    \hline
+    Plugin Version & \VAR{element['plugin_version']}\\
+    \hline
     Plugin & \VAR{element['plugin_used']}\\
-
+    \hline
     Extracted & \VAR{element['number_of_unpacked_files']}\\
-
-    Output & \begin{verbatim}\VAR{element['output']}\end{verbatim}
-    \\
-
-    Size packed -\textgreater{} unpacked & \begin{verbatim}\VAR{element['size packed -> unpacked']}\end{verbatim}
-    \\
-
-    Entropy & \VAR{entropy}\\
-
+    \hline
+    \multicolumn{2}{|p{14.5cm}|}{Output:}\\
+    \hline
+    \multicolumn{2}{|p{14.5cm}|}{\VAR{element['output'] | filter_chars}}\\
+    \hline
+    Output & \VAR{element['output'] | filter_chars}\\
+    \hline
+    size packed -\textgreater{} unpacked & \VAR{element['size packed -> unpacked'] | filter_chars}\\
+    \hline
+    entropy & \VAR{entropy}\\
+    \hline
     Summary
-    \BLOCK{for data in summary}
-    & \VAR{data}\\
+    \BLOCK{for data in element['summary']}
+    & \VAR{data | filter_chars}\\
     \BLOCK{endfor}
+    \hline
 \end{tabular}
