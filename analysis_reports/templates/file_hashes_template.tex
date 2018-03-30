@@ -1,9 +1,29 @@
 \begin{tabular}{|p{3cm}|p{11.5cm}|}
-    Time of Analysis & \VAR{analysis_date | nice_unix_time}\\
-
-    Plugin Version & \VAR{plugin_version}\\
-
-    \BLOCK{for info in element}
-    \VAR{info} & \VAR{element[info]}\\
-    \BLOCK{endfor}
+    \hline
+    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    \hline
+    Plugin Version & \VAR{element['plugin_version']}\\
+    \hline
+    imphash & \VAR{element['imphash']}\\
+    \hline
+    md5 & \VAR{element['md5']}\\
+    \hline
+    ripemd160 & \VAR{element['ripemd160']}\\
+    \hline
+    sha1 & \VAR{element['sha1']}\\
+    \hline
+    sha256 & \VAR{element['sha256']}\\
+    \hline
+    \multicolumn{2}{|p{14.5cm}|}{sha512}\\
+    \hline
+    \multicolumn{2}{|p{14.5cm}|}{\VAR{element['sha512']}}\\
+    \hline
+    \multicolumn{2}{|p{14.5cm}|}{ssdeep}\\
+    \hline
+    \multicolumn{2}{|p{14.5cm}|}{\VAR{element['ssdeep']}}\\
+    \hline
+    \multicolumn{2}{|p{14.5cm}|}{whirlpool}\\
+    \hline
+    \multicolumn{2}{|p{14.5cm}|}{\VAR{element['whirlpool']}}\\
+    \hline
 \end{tabular}
