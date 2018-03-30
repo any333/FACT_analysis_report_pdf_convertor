@@ -3,7 +3,7 @@ import requests
 import jinja2
 import os
 import sys
-from filter import byte_number_filter, nice_unix_time, filter_latex_special_chars, count_elements_in_list
+from filter import byte_number_filter, nice_unix_time, nice_number_filter, filter_latex_special_chars, count_elements_in_list
 
 latex_jinja_env = jinja2.Environment(
 	block_start_string = '\BLOCK{',
@@ -21,6 +21,7 @@ latex_jinja_env = jinja2.Environment(
 
 latex_jinja_env.filters['number_format'] = byte_number_filter
 latex_jinja_env.filters['nice_unix_time'] = nice_unix_time
+latex_jinja_env.filters['nice_number'] = nice_number_filter
 latex_jinja_env.filters['filter_chars'] = filter_latex_special_chars
 latex_jinja_env.filters['elements_count'] = count_elements_in_list
 
@@ -236,12 +237,9 @@ def create_analysis_texs():
 
         elif cursor_analysis == "unpacker":
 
-            entropy =  element['entropy']
-            entropy = round(entropy, 2)
-
             template = latex_jinja_env.get_template('templates/unpacker_template.tex')
             
-            texfile = template.render(element = element, entropy = entropy)
+            texfile = template.render(element = element)
 
             fh = open("unpacker.tex", 'w')
             fh.write(texfile)
