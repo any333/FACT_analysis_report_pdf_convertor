@@ -21,6 +21,16 @@ def nice_unix_time(unix_time_stamp):
     else:
         return unix_time_stamp
 
+def nice_number_filter(i):
+    if isinstance(i, int):
+        return '{:,}'.format(i)
+    elif isinstance(i, float):
+        return '{:,.2f}'.format(i)
+    elif i is None:
+        return 'not available'
+    else:
+        return i
+
 def filter_latex_special_chars(input):
     if "$" in input:
         input = input.replace("$", "\$")
