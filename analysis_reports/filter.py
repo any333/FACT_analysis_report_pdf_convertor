@@ -21,13 +21,59 @@ def nice_unix_time(unix_time_stamp):
     else:
         return unix_time_stamp
 
-def comment_out_regex_meta_chars(input_data):
-    '''
-    comments out chars used by regular expressions in the input string
-    '''
-    meta_chars = ['^', '$', '.', '[', ']',
-                  '|', '(', ')', '?', '*', '+', '{', '}']
-    for c in meta_chars:
-        if c in input_data:
-            input_data = input_data.replace(c, '\\{}'.format(c))
-    return input_data
+def filter_latex_special_chars(input):
+    if "$" in input:
+        input = input.replace("$", "\$")
+    if "#" in input:
+        input = input.replace("#", "\#")
+    if "%" in input:
+        input = input.replace("%", "\%")
+    if "&" in input:
+        input = input.replace("&", "\&")
+    if "_" in input:
+        input = input.replace("_", "\_")
+    if "{" in input:
+        input = input.replace("{", "\{")
+    if "}" in input:
+        input = input.replace("}", "\}")
+    if "^" in input:
+        input = input.replace("^", "\\textasciicircum{}")
+    if "~" in input:
+        input = input.replace("~", "\\textasciitilde{}")
+    if ">" in input:
+        input = input.replace(">", "\\textgreater{}")
+    if "<" in input:
+        input = input.replace("<", "\\textless{}")
+    return input
+
+def count_elements_in_list(list):
+    return len(list)
+
+'''
+def filter(texfile):
+    if "&" in texfile:
+        texfile = texfile.replace("&", "\&")
+
+    if "\r" in texfile:
+        texfile = texfile.replace("\r", "\\\r")
+
+    if "^" in texfile:
+        texfile = texfile.replace("^", "\string^")
+
+    if "\n\'" in texfile:
+        texfile = texfile.replace("\n\'", "")
+
+    if "#" in texfile:
+        texfile = texfile.replace("#", "\\#")
+
+    if "\\nchar" in texfile:
+        texfile = texfile.replace("\\nchar", "\\\\nchar")
+
+    if "\\nLSS" in texfile:
+        texfile = texfile.replace("\\nLSS", "\\\\nLSS")
+
+    if "\\@" in texfile:
+        texfile = texfile.replace("\\@", "\\\\@")
+
+    return texfile
+'''
