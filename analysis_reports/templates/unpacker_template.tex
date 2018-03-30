@@ -16,7 +16,7 @@
     \hline
     size packed -\textgreater{} unpacked & \VAR{element['size packed -> unpacked'] | filter_chars}\\
     \hline
-    entropy & \VAR{entropy}\\
+    entropy & \VAR{element['entropy'] | nice_number}\\
     \hline
     Summary
     \BLOCK{for data in element['summary']}
