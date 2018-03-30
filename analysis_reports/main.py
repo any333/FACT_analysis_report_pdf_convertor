@@ -3,8 +3,7 @@ import requests
 import jinja2
 import os
 import sys
-from jinja2 import Template
-from filter import byte_number_filter, nice_unix_time
+from filter import byte_number_filter, nice_unix_time, filter_latex_special_chars, count_elements_in_list
 
 latex_jinja_env = jinja2.Environment(
 	block_start_string = '\BLOCK{',
@@ -18,29 +17,12 @@ latex_jinja_env = jinja2.Environment(
 	trim_blocks = True,
 	autoescape = False,
 	loader = jinja2.FileSystemLoader(os.path.abspath('.'))
-    #filters['escape_tex'] = escape_tex
 )
 
 latex_jinja_env.filters['number_format'] = byte_number_filter
 latex_jinja_env.filters['nice_unix_time'] = nice_unix_time
-'''
-LATEX_SUBS = (
-    (re.compile(r'\\'), r'\\textbackslash'),
-    (re.compile(r'([{}_#%&$])'), r'\\\1'),
-    (re.compile(r'~'), r'\~{}'),
-    (re.compile(r'\^'), r'\^{}'),
-    (re.compile(r'"'), r"''"),
-    (re.compile(r'\.\.\.+'), r'\\ldots'),
-)
-
-
-def escape_tex(value):
-    newval = value
-    for pattern, replacement in LATEX_SUBS:
-        newval = pattern.sub(replacement, newval)
-    return newval
-'''
-
+latex_jinja_env.filters['filter_chars'] = filter_latex_special_chars
+latex_jinja_env.filters['elements_count'] = count_elements_in_list
 
 HOST = "http://localhost:5000"
 PATH =  "/rest/firmware/"
@@ -64,60 +46,26 @@ analysis = firmware_data['firmware']['analysis']
 def create_main_tex():
     
     template = latex_jinja_env.get_template('templates/main_template.tex')
-    #print(template.render(analysis=analysis))
+
     maintexfile = template.render(meta_data = meta_data)
     #filehandler
     fh = open("main.tex", 'w')
     fh.write(maintexfile)
     fh.close
+
     pass
 
 def create_meta_tex():
 
-    size = meta_data['size']
-
     template = latex_jinja_env.get_template('templates/meta_data_template.tex')
-    
-    #print(template.render(meta_copy = meta_copy))
-    maintexfile = template.render(meta_data = meta_data, size = size)
+
+    maintexfile = template.render(meta_data = meta_data)
     
     fh = open("meta.tex", 'w')
     fh.write(maintexfile)
     fh.close
 
     pass
-
-
-def filter(texfile):
-    if "&" in texfile:
-        texfile = texfile.replace("&", "\&")
-
-    if "\r" in texfile:
-        texfile = texfile.replace("\r", "\\\r")
-
-    if "^" in texfile:
-        texfile = texfile.replace("^", "\string^")
-
-    if "_" in texfile:
-        texfile = texfile.replace("_", "\_")
-
-    if "\n\'" in texfile:
-        texfile = texfile.replace("\n\'", "")
-
-    if "#" in texfile:
-        texfile = texfile.replace("#", "\\#")
-
-    if "\\nchar" in texfile:
-        texfile = texfile.replace("\\nchar", "\\\\nchar")
-
-    if "\\nLSS" in texfile:
-        texfile = texfile.replace("\\nLSS", "\\\\nLSS")
-
-    if "\\@" in texfile:
-        texfile = texfile.replace("\\@", "\\\\@")
-
-    return texfile
-
 
 def create_analysis_texs():
 
@@ -127,13 +75,9 @@ def create_analysis_texs():
 
         if cursor_analysis == "exploit_mitigations":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            summary = element['summary']
-
             template = latex_jinja_env.get_template('templates/exploit_mitigations_template.tex')
 
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, summary = summary)
+            texfile = template.render(element = element)
 
             fh = open("exploitmitigations.tex", 'w')
             fh.write(texfile)
@@ -143,13 +87,9 @@ def create_analysis_texs():
 
         elif cursor_analysis == "crypto_material":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            summary = element['summary']
-
             template = latex_jinja_env.get_template('templates/crypto_material_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, summary = summary)
+            texfile = template.render(element = element)
 
             fh = open("cryptomaterial.tex", 'w')
             fh.write(texfile)
@@ -158,13 +98,9 @@ def create_analysis_texs():
             pass
         elif cursor_analysis == "cpu_architecture":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            summary = element['summary']
-
             template = latex_jinja_env.get_template('templates/cpu_architecture_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, summary = summary)
+            texfile = template.render(element = element)
 
             fh = open("cpuarchitecture.tex", 'w')
             fh.write(texfile)
@@ -174,13 +110,9 @@ def create_analysis_texs():
 
         elif cursor_analysis == "base64_decoder":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            summary = element['summary']
-
             template = latex_jinja_env.get_template('templates/base64_decoder_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, summary  = summary)
+            texfile = template.render(element = element)
 
             fh = open("base64decoder.tex", 'w')
             fh.write(texfile)
@@ -190,15 +122,9 @@ def create_analysis_texs():
 
         elif cursor_analysis == "file_hashes":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-
-            del element['analysis_date']
-            del element['plugin_version']
-
             template = latex_jinja_env.get_template('templates/file_hashes_template.tex')
                                     
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, element = element)
+            texfile = template.render(element = element)
 
             fh = open("filehashes.tex", 'w')
             fh.write(texfile)
@@ -207,18 +133,10 @@ def create_analysis_texs():
             pass
 
         elif cursor_analysis == "file_type":
-
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            summary = element['summary']
-
-            del element['analysis_date']
-            del element['plugin_version']
-            del element['summary']
             
             template = latex_jinja_env.get_template('templates/file_type_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, summary = summary, element = element)
+            texfile = template.render(element = element)
 
             fh = open("filetype.tex", 'w')
             fh.write(texfile)
@@ -228,13 +146,9 @@ def create_analysis_texs():
 
         elif cursor_analysis == "init_systems":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            summary = element['summary']
-
             template = latex_jinja_env.get_template('templates/init_systems_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, summary = summary)
+            texfile = template.render(element = element)
 
             fh = open("initsystems.tex", 'w')
             fh.write(texfile)
@@ -244,23 +158,20 @@ def create_analysis_texs():
 
         elif cursor_analysis == "ip_and_uri_finder":
 
-            template = latex_jinja_env.get_template('templates/ip_and_uri_finder_template.tex')
-
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
             ips_v4 = element['ips_v4']
             ips_v6 = element['ips_v6']
             uris = element['uris']
-            summary = element['summary']
 
             if len(ips_v4) == 0:
-                ips_v4.append('List is empty.')
+                ips_v4.append('list is empty')
             if len(ips_v6) == 0:
-                ips_v6.append('The List is empty.')
+                ips_v6.append('list is empty')
             if len(uris) == 0:
-                uris.append('The List is empty.')
-            
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, ips_v4 =  ips_v4, ips_v6 = ips_v6, uris = uris, summary = summary)
+                uris.append('list is empty')
+
+            template = latex_jinja_env.get_template('templates/ip_and_uri_finder_template.tex')
+
+            texfile = template.render(element = element, ips_v4 =  ips_v4, ips_v6 = ips_v6, uris = uris)
 
             fh = open("ipandurifinder.tex", 'w')
             fh.write(texfile)
@@ -269,16 +180,10 @@ def create_analysis_texs():
             pass
 
         elif cursor_analysis == "software_components":
-
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            summary = element['summary']
             
             template = latex_jinja_env.get_template('templates/software_components_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, summary = summary)
-
-            #texfile = filter(texfile)
+            texfile = template.render(element = element)
 
             fh = open("softwarecomponents.tex", 'w' )
             fh.write(texfile)
@@ -287,19 +192,17 @@ def create_analysis_texs():
             pass
 
         elif cursor_analysis == "printable_strings":
-
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
+            '''
             strings = element['strings']
             filtered_strings = []
             for string in strings:
-                new_string = string
+                new_string = filter(string)
                 filtered_strings.append(new_string)
-
+            '''
 
             template = latex_jinja_env.get_template('templates/printable_strings_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, strings = filtered_strings)
+            texfile = template.render(element = element)
 
             fh = open("printablestrings.tex", 'w')
             fh.write(texfile)
@@ -309,15 +212,9 @@ def create_analysis_texs():
 
         elif cursor_analysis == "users_and_passwords":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            summary = element['summary']
-
             template = latex_jinja_env.get_template('templates/users_and_passwords_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, summary = summary)
-
-            #texfile = filter(texfile)
+            texfile = template.render(element = element)
 
             fh = open("usersandpasswords.tex", 'w')
             fh.write(texfile)
@@ -327,15 +224,9 @@ def create_analysis_texs():
         
         elif cursor_analysis == "string_evaluator":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            strings = element['string_eval']
-
             template = latex_jinja_env.get_template('templates/string_evaluator_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, strings = strings)
-
-            #texfile = filter(texfile)
+            texfile = template.render(element = element)
 
             fh = open("stringevaluator.tex", 'w')
             fh.write(texfile)
@@ -345,20 +236,12 @@ def create_analysis_texs():
 
         elif cursor_analysis == "unpacker":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
             entropy =  element['entropy']
             entropy = round(entropy, 2)
-            summary = element['summary']
-
-            del element['analysis_date']
-            del element['plugin_version']
-            del element['entropy']
-            del element['summary']
 
             template = latex_jinja_env.get_template('templates/unpacker_template.tex')
             
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, entropy = entropy, element = element, summary = summary)
+            texfile = template.render(element = element, entropy = entropy)
 
             fh = open("unpacker.tex", 'w')
             fh.write(texfile)
@@ -368,24 +251,9 @@ def create_analysis_texs():
 
         elif cursor_analysis == "malware_scanner":
 
-            analysis_date = element['analysis_date']
-            plugin_version = element['plugin_version']
-            scanners = element['scanners']
-            scans = element['scans']
-            summary = element['summary']
-
-            del element['analysis_date']
-            del element['plugin_version']
-            del element['scanners']
-            del element['scans']
-            del element['summary']
-
             template = latex_jinja_env.get_template('templates/malware_scanner_template.tex')
 
-
-            texfile = template.render(analysis_date = analysis_date, plugin_version = plugin_version, scanners = scanners, scans = scans, summary = summary, element = element)
-
-            #texfile = filter(texfile)
+            texfile = template.render(element = element)
 
             fh = open("malwarescanner.tex", 'w')
             fh.write(texfile)
