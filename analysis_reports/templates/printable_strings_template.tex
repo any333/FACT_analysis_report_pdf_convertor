@@ -1,11 +1,9 @@
 \begin{tabular}{|p{3cm}|p{11.5cm}|}
-    Time of Analysis & \VAR{analysis_date | nice_unix_time}\\
-
-    Plugin Version & \VAR{plugin_version}\\
-
-    Strings & \begin{verbatim}\VAR{strings}\end{verbatim}
-    \BLOCK{for string in strings}
-
-    \BLOCK{endfor}\\
-
+    \hline
+    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    \hline
+    Plugin Version & \VAR{element['plugin_version']}\\
+    \hline
+    string count & \VAR{element['strings'] | elements_count}\\
+    \hline
 \end{tabular}

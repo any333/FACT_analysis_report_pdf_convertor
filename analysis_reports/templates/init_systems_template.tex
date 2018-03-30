@@ -1,10 +1,12 @@
 \begin{tabular}{|p{3cm}|p{11.5cm}|}
-    Time of Analysis & \VAR{analysis_date | nice_unix_time}\\
-
-    Plugin Version & \VAR{plugin_version}\\
-
+    \hline
+    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    \hline
+    Plugin Version & \VAR{element['plugin_version']}\\
+    \hline
     Summary
     \BLOCK{for data in summary}
-    & \VAR{data}\\
-    \BLOCK{endfor}
+    & \VAR{data | filter_chars}\\
+    \BLOCK{endfor}\\
+    \hline
 \end{tabular}

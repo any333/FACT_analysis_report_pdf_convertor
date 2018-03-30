@@ -1,25 +1,27 @@
-\begin{tabular}{|p{3cm}|p{11.5cm}|}
-    Time of Analysis & \VAR{analysis_date | nice_unix_time}\\
-
-    Plugin Version & \VAR{plugin_version}\\
-
-    IPv4
+\begin{longtable}{|p{3cm}|p{11.5cm}|}
+    \hline
+    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    \hline
+    Plugin Version & \VAR{element['plugin_version']}\\
+    \hline
+    IPs v4
     \BLOCK{for ip in ips_v4}
     & \VAR{ip}\\
     \BLOCK{endfor}
-
-    IPv6
+    \hline
+    IPs v6
     \BLOCK{for ip in ips_v6}
     & \VAR{ip}\\
     \BLOCK{endfor}
-
-    URI
+    \hline
+    URIs
     \BLOCK{for uri in uris}
     & \VAR{uri}\\
     \BLOCK{endfor}
-
+    \hline
     Summary
-    \BLOCK{for data in summary}
-    & \VAR{data}\\
+    \BLOCK{for data in element['summary']}
+    & \VAR{data | filter_chars}\\
     \BLOCK{endfor}
-\end{tabular}
+    \hline
+\end{longtable}

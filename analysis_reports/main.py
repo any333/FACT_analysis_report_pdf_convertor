@@ -4,8 +4,7 @@ import jinja2
 import os
 import sys
 from jinja2 import Template
-from common_helper_files import human_readable_file_size
-from time import localtime, strftime, struct_time
+from filter import byte_number_filter, nice_unix_time
 
 latex_jinja_env = jinja2.Environment(
 	block_start_string = '\BLOCK{',
@@ -21,6 +20,9 @@ latex_jinja_env = jinja2.Environment(
 	loader = jinja2.FileSystemLoader(os.path.abspath('.'))
     #filters['escape_tex'] = escape_tex
 )
+
+latex_jinja_env.filters['number_format'] = byte_number_filter
+latex_jinja_env.filters['nice_unix_time'] = nice_unix_time
 '''
 LATEX_SUBS = (
     (re.compile(r'\\'), r'\\textbackslash'),
@@ -58,37 +60,6 @@ firmware_data =_make_get_requests(GET_URL)
 meta_data = firmware_data['firmware']['meta_data']
 analysis = firmware_data['firmware']['analysis']
 
-def byte_number_filter(i, verbose=True):
-    if isinstance(i, int) or isinstance(i, float):
-        if verbose:
-            return '{} ({})'.format(human_readable_file_size(i), format(i, ',d') + ' bytes')
-        else:
-            return human_readable_file_size(i)
-    else:
-        return 'not available'
-
-def nice_unix_time(unix_time_stamp):
-    '''
-    input unix_time_stamp
-    output string 'YYYY-MM-DD HH:MM:SS'
-    '''
-    if isinstance(unix_time_stamp, float) or isinstance(unix_time_stamp, int):
-        tmp = localtime(unix_time_stamp)
-        return strftime('%Y-%m-%d %H:%M:%S', tmp)
-    else:
-        return unix_time_stamp
-
-def comment_out_regex_meta_chars(input_data):
-    '''
-    comments out chars used by regular expressions in the input string
-    '''
-    meta_chars = ['^', '$', '.', '[', ']',
-                  '|', '(', ')', '?', '*', '+', '{', '}']
-    for c in meta_chars:
-        if c in input_data:
-            input_data = input_data.replace(c, '\\{}'.format(c))
-    return input_data
-
 
 def create_main_tex():
     
@@ -103,7 +74,7 @@ def create_main_tex():
 
 def create_meta_tex():
 
-    size = byte_number_filter(meta_data['size'])
+    size = meta_data['size']
 
     template = latex_jinja_env.get_template('templates/meta_data_template.tex')
     
@@ -156,7 +127,7 @@ def create_analysis_texs():
 
         if cursor_analysis == "exploit_mitigations":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             summary = element['summary']
 
@@ -172,7 +143,7 @@ def create_analysis_texs():
 
         elif cursor_analysis == "crypto_material":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             summary = element['summary']
 
@@ -187,7 +158,7 @@ def create_analysis_texs():
             pass
         elif cursor_analysis == "cpu_architecture":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             summary = element['summary']
 
@@ -203,7 +174,7 @@ def create_analysis_texs():
 
         elif cursor_analysis == "base64_decoder":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             summary = element['summary']
 
@@ -219,7 +190,7 @@ def create_analysis_texs():
 
         elif cursor_analysis == "file_hashes":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
 
             del element['analysis_date']
@@ -237,7 +208,7 @@ def create_analysis_texs():
 
         elif cursor_analysis == "file_type":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             summary = element['summary']
 
@@ -257,7 +228,7 @@ def create_analysis_texs():
 
         elif cursor_analysis == "init_systems":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             summary = element['summary']
 
@@ -275,7 +246,7 @@ def create_analysis_texs():
 
             template = latex_jinja_env.get_template('templates/ip_and_uri_finder_template.tex')
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             ips_v4 = element['ips_v4']
             ips_v6 = element['ips_v6']
@@ -299,7 +270,7 @@ def create_analysis_texs():
 
         elif cursor_analysis == "software_components":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             summary = element['summary']
             
@@ -317,12 +288,12 @@ def create_analysis_texs():
 
         elif cursor_analysis == "printable_strings":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             strings = element['strings']
             filtered_strings = []
             for string in strings:
-                new_string = comment_out_regex_meta_chars(string)
+                new_string = string
                 filtered_strings.append(new_string)
 
 
@@ -338,7 +309,7 @@ def create_analysis_texs():
 
         elif cursor_analysis == "users_and_passwords":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             summary = element['summary']
 
@@ -356,7 +327,7 @@ def create_analysis_texs():
         
         elif cursor_analysis == "string_evaluator":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             strings = element['string_eval']
 
@@ -374,7 +345,7 @@ def create_analysis_texs():
 
         elif cursor_analysis == "unpacker":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             entropy =  element['entropy']
             entropy = round(entropy, 2)
@@ -397,7 +368,7 @@ def create_analysis_texs():
 
         elif cursor_analysis == "malware_scanner":
 
-            analysis_date = nice_unix_time(element['analysis_date'])
+            analysis_date = element['analysis_date']
             plugin_version = element['plugin_version']
             scanners = element['scanners']
             scans = element['scans']

@@ -1,16 +1,16 @@
 \begin{tabular}{|p{3cm}|p{11.5cm}|}
-    Time of Analysis & \VAR{analysis_date | nice_unix_time}\\
-
-    Plugin Version & \VAR{plugin_version}\\
-
-    File Type & \begin{verbatim}\VAR{element['full']}\end{verbatim}
-    \\
-
-    MIME & \begin{verbatim}\VAR{element['mime']}\end{verbatim}
-    \\
-
+    \hline
+    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    \hline
+    Plugin Version & \VAR{element['plugin_version']}\\
+    \hline
+    File Type & \VAR{element['full'] | filter_chars}\\
+    \hline
+    MIME & \VAR{element['mime'] | filter_chars}\\
+    \hline
     Summary
-    \BLOCK{for data in summary}
-    & \VAR{data}\\
+    \BLOCK{for data in element['summary']}
+    & \VAR{data | filter_chars}\\
     \BLOCK{endfor}
+    \hline
 \end{tabular}
