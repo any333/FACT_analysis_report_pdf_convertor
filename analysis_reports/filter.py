@@ -68,6 +68,14 @@ def convert_base64_to_png_filter(s):
 
     return file_name
 
+def check_if_list_empty(list):
+    if list:
+        return list
+    else:
+        empty_list = []
+        empty_list.append('list is empty')
+        return empty_list
+
 '''
 def filter(texfile):
     if "&" in texfile:
