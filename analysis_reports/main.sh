@@ -1,10 +1,12 @@
 #!/bin/bash
 echo "Shellskript"
 
-python3 main.py b7c55a6de9fd1b85ec07f661b4d21638021999e2b1e754de1922f3b01f2cedb8_3378139
+python3 main.py 26ef025078abda69d2c3de06e27142a6db1a6385bd2524ce4976211570264a39_22632490
 env buf_size=1000000 pdflatex main.tex
 
 rm base64decoder.tex
+rm binwalk.tex
+rm entropy_analysis_graph.png
 rm cpuarchitecture.tex
 rm cryptomaterial.tex
 rm exploitmitigations.tex
