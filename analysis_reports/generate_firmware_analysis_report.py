@@ -71,16 +71,18 @@ def create_analysis_texs():
 
         selected_analysis = analysis[processed_analysis]
 
-        template = latex_jinja_env.get_template('templates/' + processed_analysis + '_template.tex')
+        if os.path.isfile('templates/' + processed_analysis + '_template.tex'):
 
-        texfile = template.render(selected_analysis=selected_analysis)
+            template = latex_jinja_env.get_template('templates/' + processed_analysis + '_template.tex')
 
-        processed_texfile = processed_analysis + ".tex"
-        fh = open(processed_texfile, 'w')
-        fh.write(texfile)
-        fh.close
+            texfile = template.render(selected_analysis=selected_analysis)
 
-        pass
+            processed_texfile = processed_analysis + ".tex"
+            fh = open(processed_texfile, 'w')
+            fh.write(texfile)
+            fh.close
+
+            pass
 
 setup_jinja_filters()
 create_main_tex()
