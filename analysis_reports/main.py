@@ -3,7 +3,7 @@ import requests
 import jinja2
 import os
 import sys
-from filter import byte_number_filter, nice_unix_time, nice_number_filter, filter_latex_special_chars, count_elements_in_list
+from filter import byte_number_filter, nice_unix_time, nice_number_filter, filter_latex_special_chars, count_elements_in_list, convert_base64_to_png_filter, check_if_list_empty
 
 latex_jinja_env = jinja2.Environment(
 	block_start_string = '\BLOCK{',
@@ -24,6 +24,8 @@ latex_jinja_env.filters['nice_unix_time'] = nice_unix_time
 latex_jinja_env.filters['nice_number'] = nice_number_filter
 latex_jinja_env.filters['filter_chars'] = filter_latex_special_chars
 latex_jinja_env.filters['elements_count'] = count_elements_in_list
+latex_jinja_env.filters['base64_to_png'] = convert_base64_to_png_filter
+latex_jinja_env.filters['check_list'] = check_if_list_empty
 
 HOST = "http://localhost:5000"
 PATH =  "/rest/firmware/"
@@ -70,50 +72,15 @@ def create_meta_tex():
 
 def create_analysis_texs():
 
-    for cursor_analysis in analysis:
+    for processed_analysis in analysis:
 
-        element = analysis[cursor_analysis]
+        selected_analysis = analysis[processed_analysis]
 
-        if cursor_analysis == "exploit_mitigations":
-
-            template = latex_jinja_env.get_template('templates/exploit_mitigations_template.tex')
-
-            texfile = template.render(element = element)
-
-            fh = open("exploitmitigations.tex", 'w')
-            fh.write(texfile)
-            fh.close
-            
-            pass
-
-        elif cursor_analysis == "crypto_material":
-
-            template = latex_jinja_env.get_template('templates/crypto_material_template.tex')
-            
-            texfile = template.render(element = element)
-
-            fh = open("cryptomaterial.tex", 'w')
-            fh.write(texfile)
-            fh.close
-
-            pass
-        elif cursor_analysis == "cpu_architecture":
-
-            template = latex_jinja_env.get_template('templates/cpu_architecture_template.tex')
-            
-            texfile = template.render(element = element)
-
-            fh = open("cpuarchitecture.tex", 'w')
-            fh.write(texfile)
-            fh.close
-
-            pass 
-
-        elif cursor_analysis == "base64_decoder":
+        if processed_analysis == "base64_decoder":
 
             template = latex_jinja_env.get_template('templates/base64_decoder_template.tex')
-            
-            texfile = template.render(element = element)
+
+            texfile = template.render(selected_analysis=selected_analysis)
 
             fh = open("base64decoder.tex", 'w')
             fh.write(texfile)
@@ -121,11 +88,59 @@ def create_analysis_texs():
 
             pass
 
-        elif cursor_analysis == "file_hashes":
+        elif processed_analysis == "binwalk":
+
+            template = latex_jinja_env.get_template('templates/binwalk_template.tex')
+
+            texfile = template.render(selected_analysis = selected_analysis)
+
+            fh = open("binwalk.tex", 'w')
+            fh.write(texfile)
+            fh.close
+
+            pass
+
+        elif processed_analysis == "cpu_architecture":
+
+            template = latex_jinja_env.get_template('templates/cpu_architecture_template.tex')
+
+            texfile = template.render(selected_analysis=selected_analysis)
+
+            fh = open("cpuarchitecture.tex", 'w')
+            fh.write(texfile)
+            fh.close
+
+            pass
+
+        elif processed_analysis == "crypto_material":
+
+            template = latex_jinja_env.get_template('templates/crypto_material_template.tex')
+
+            texfile = template.render(selected_analysis=selected_analysis)
+
+            fh = open("crypto_material.tex", 'w')
+            fh.write(texfile)
+            fh.close
+
+            pass
+
+        elif processed_analysis == "exploit_mitigations":
+
+            template = latex_jinja_env.get_template('templates/exploit_mitigations_template.tex')
+
+            texfile = template.render(selected_analysis = selected_analysis)
+
+            fh = open("exploitmitigations.tex", 'w')
+            fh.write(texfile)
+            fh.close
+            
+            pass
+
+        elif processed_analysis == "file_hashes":
 
             template = latex_jinja_env.get_template('templates/file_hashes_template.tex')
                                     
-            texfile = template.render(element = element)
+            texfile = template.render(selected_analysis = selected_analysis)
 
             fh = open("filehashes.tex", 'w')
             fh.write(texfile)
@@ -133,11 +148,11 @@ def create_analysis_texs():
 
             pass
 
-        elif cursor_analysis == "file_type":
+        elif processed_analysis == "file_type":
             
             template = latex_jinja_env.get_template('templates/file_type_template.tex')
             
-            texfile = template.render(element = element)
+            texfile = template.render(selected_analysis = selected_analysis)
 
             fh = open("filetype.tex", 'w')
             fh.write(texfile)
@@ -145,11 +160,11 @@ def create_analysis_texs():
             
             pass
 
-        elif cursor_analysis == "init_systems":
+        elif processed_analysis == "init_systems":
 
             template = latex_jinja_env.get_template('templates/init_systems_template.tex')
             
-            texfile = template.render(element = element)
+            texfile = template.render(selected_analysis = selected_analysis)
 
             fh = open("initsystems.tex", 'w')
             fh.write(texfile)
@@ -157,22 +172,11 @@ def create_analysis_texs():
             
             pass
 
-        elif cursor_analysis == "ip_and_uri_finder":
-
-            ips_v4 = element['ips_v4']
-            ips_v6 = element['ips_v6']
-            uris = element['uris']
-
-            if len(ips_v4) == 0:
-                ips_v4.append('list is empty')
-            if len(ips_v6) == 0:
-                ips_v6.append('list is empty')
-            if len(uris) == 0:
-                uris.append('list is empty')
+        elif processed_analysis == "ip_and_uri_finder":
 
             template = latex_jinja_env.get_template('templates/ip_and_uri_finder_template.tex')
 
-            texfile = template.render(element = element, ips_v4 =  ips_v4, ips_v6 = ips_v6, uris = uris)
+            texfile = template.render(selected_analysis = selected_analysis)
 
             fh = open("ipandurifinder.tex", 'w')
             fh.write(texfile)
@@ -180,19 +184,19 @@ def create_analysis_texs():
 
             pass
 
-        elif cursor_analysis == "software_components":
-            
-            template = latex_jinja_env.get_template('templates/software_components_template.tex')
-            
-            texfile = template.render(element = element)
+        elif processed_analysis == "malware_scanner":
 
-            fh = open("softwarecomponents.tex", 'w' )
+            template = latex_jinja_env.get_template('templates/malware_scanner_template.tex')
+
+            texfile = template.render(selected_analysis=selected_analysis)
+
+            fh = open("malwarescanner.tex", 'w')
             fh.write(texfile)
             fh.close
 
             pass
 
-        elif cursor_analysis == "printable_strings":
+        elif processed_analysis == "printable_strings":
             '''
             strings = element['strings']
             filtered_strings = []
@@ -202,8 +206,8 @@ def create_analysis_texs():
             '''
 
             template = latex_jinja_env.get_template('templates/printable_strings_template.tex')
-            
-            texfile = template.render(element = element)
+
+            texfile = template.render(selected_analysis=selected_analysis)
 
             fh = open("printablestrings.tex", 'w')
             fh.write(texfile)
@@ -211,23 +215,23 @@ def create_analysis_texs():
 
             pass
 
-        elif cursor_analysis == "users_and_passwords":
-
-            template = latex_jinja_env.get_template('templates/users_and_passwords_template.tex')
+        elif processed_analysis == "software_components":
             
-            texfile = template.render(element = element)
+            template = latex_jinja_env.get_template('templates/software_components_template.tex')
+            
+            texfile = template.render(selected_analysis = selected_analysis)
 
-            fh = open("usersandpasswords.tex", 'w')
+            fh = open("softwarecomponents.tex", 'w' )
             fh.write(texfile)
             fh.close
 
             pass
-        
-        elif cursor_analysis == "string_evaluator":
+
+        elif processed_analysis == "string_evaluator":
 
             template = latex_jinja_env.get_template('templates/string_evaluator_template.tex')
-            
-            texfile = template.render(element = element)
+
+            texfile = template.render(selected_analysis=selected_analysis)
 
             fh = open("stringevaluator.tex", 'w')
             fh.write(texfile)
@@ -235,11 +239,11 @@ def create_analysis_texs():
 
             pass
 
-        elif cursor_analysis == "unpacker":
+        elif processed_analysis == "unpacker":
 
             template = latex_jinja_env.get_template('templates/unpacker_template.tex')
-            
-            texfile = template.render(element = element)
+
+            texfile = template.render(selected_analysis=selected_analysis)
 
             fh = open("unpacker.tex", 'w')
             fh.write(texfile)
@@ -247,19 +251,21 @@ def create_analysis_texs():
 
             pass
 
-        elif cursor_analysis == "malware_scanner":
+        elif processed_analysis == "users_and_passwords":
 
-            template = latex_jinja_env.get_template('templates/malware_scanner_template.tex')
+            template = latex_jinja_env.get_template('templates/users_and_passwords_template.tex')
+            
+            texfile = template.render(selected_analysis = selected_analysis)
 
-            texfile = template.render(element = element)
-
-            fh = open("malwarescanner.tex", 'w')
+            fh = open("usersandpasswords.tex", 'w')
             fh.write(texfile)
             fh.close
+
+            pass
 
     pass
 
 create_main_tex()
 create_meta_tex()
 create_analysis_texs()
-print("All .tex Files successfully created.")
+print("all .tex files successfully created")
