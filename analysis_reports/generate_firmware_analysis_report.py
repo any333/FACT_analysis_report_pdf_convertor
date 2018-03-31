@@ -6,6 +6,11 @@ import sys
 from filter import byte_number_filter, nice_unix_time, nice_number_filter, filter_latex_special_chars, \
     count_elements_in_list, convert_base64_to_png_filter, check_if_list_empty
 
+HOST = "http://localhost:5000"
+PATH = "/rest/firmware/"
+FIRMWARE_UID = sys.argv[1]
+GET_URL = HOST + PATH + FIRMWARE_UID
+
 latex_jinja_env = jinja2.Environment(
     block_start_string='\BLOCK{',
     block_end_string='}',
@@ -29,17 +34,11 @@ def setup_jinja_filters():
     latex_jinja_env.filters['base64_to_png'] = convert_base64_to_png_filter
     latex_jinja_env.filters['check_list'] = check_if_list_empty
 
-HOST = "http://localhost:5000"
-PATH = "/rest/firmware/"
-FIRMWARE_UID = sys.argv[1]
-GET_URL = HOST + PATH + FIRMWARE_UID
-
-def _make_get_requests(url):
-    response = requests.get(url)
+def _make_get_requests(URL):
+    response = requests.get(URL)
     response_data = response.text
     response_dict = json.loads(response_data)
     return response_dict
-
 
 firmware_data =_make_get_requests(GET_URL)
 meta_data = firmware_data['firmware']['meta_data']
@@ -56,7 +55,6 @@ def create_main_tex():
 
     pass
 
-
 def create_meta_tex():
     template = latex_jinja_env.get_template('templates/meta_data_template.tex')
 
@@ -67,7 +65,6 @@ def create_meta_tex():
     fh.close
 
     pass
-
 
 def create_analysis_texs():
     for processed_analysis in analysis:
@@ -84,8 +81,6 @@ def create_analysis_texs():
         fh.close
 
         pass
-
-    pass
 
 setup_jinja_filters()
 create_main_tex()
