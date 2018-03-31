@@ -1,26 +1,38 @@
 \begin{tabular}{|p{3cm}|p{11.5cm}|}
     \hline
-    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    Time of Analysis & \VAR{selected_analysis['analysis_date'] | nice_unix_time}\\
     \hline
-    Plugin Version & \VAR{element['plugin_version']}\\
+
+    Plugin Version & \VAR{selected_analysis['plugin_version']}\\
     \hline
-    Plugin & \VAR{element['plugin_used']}\\
+
+    Plugin & \VAR{selected_analysis['plugin_used']}\\
     \hline
-    Extracted & \VAR{element['number_of_unpacked_files']}\\
+
+    Extracted & \VAR{selected_analysis['number_of_unpacked_files']}\\
     \hline
-    \multicolumn{2}{|p{14.5cm}|}{Output:}\\
+
+    \BLOCK{if selected_analysis['output']}
+        \multicolumn{2}{|p{14.5cm}|}{Output:}\\
+        \hline
+        \multicolumn{2}{|p{14.5cm}|}{\VAR{selected_analysis['output'] | filter_chars}}\\
+        \hline
+        Output & \VAR{selected_analysis['output'] | filter_chars}\\
+        \hline
+    \BLOCK{endif}
+
+    size packed -\textgreater{} unpacked & \VAR{selected_analysis['size packed -> unpacked'] | filter_chars}\\
     \hline
-    \multicolumn{2}{|p{14.5cm}|}{\VAR{element['output'] | filter_chars}}\\
+
+    entropy & \VAR{selected_analysis['entropy'] | nice_number}\\
     \hline
-    Output & \VAR{element['output'] | filter_chars}\\
-    \hline
-    size packed -\textgreater{} unpacked & \VAR{element['size packed -> unpacked'] | filter_chars}\\
-    \hline
-    entropy & \VAR{element['entropy'] | nice_number}\\
-    \hline
-    Summary
-    \BLOCK{for data in element['summary']}
-    & \VAR{data | filter_chars}\\
-    \BLOCK{endfor}
-    \hline
+
+    \BLOCK{if selected_analysis['summary']}
+        Summary
+        \BLOCK{for data in selected_analysis['summary']}
+            & \VAR{data | filter_chars}\\
+        \BLOCK{endfor}
+        \hline
+    \BLOCK{endif}
+
 \end{tabular}
