@@ -1,5 +1,6 @@
 from common_helper_files import human_readable_file_size
 from time import localtime, strftime, struct_time
+from base64 import decodebytes
 
 def byte_number_filter(i, verbose=True):
     if isinstance(i, int) or isinstance(i, float):
@@ -58,6 +59,14 @@ def filter_latex_special_chars(input):
 
 def count_elements_in_list(list):
     return len(list)
+
+def convert_base64_to_png_filter(s):
+    base64_encoded = s.encode('utf-8')
+    file_name = "entropy_analysis_graph.png"
+    with open(file_name, "wb") as fh:
+        fh.write(decodebytes(base64_encoded))
+
+    return file_name
 
 '''
 def filter(texfile):
