@@ -1,16 +1,22 @@
 \begin{tabular}{|p{3cm}|p{11.5cm}|}
     \hline
-    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    Time of Analysis & \VAR{selected_analysis['analysis_date'] | nice_unix_time}\\
     \hline
-    Plugin Version & \VAR{element['plugin_version']}\\
+
+    Plugin Version & \VAR{selected_analysis['plugin_version']}\\
     \hline
-    File Type & \VAR{element['full'] | filter_chars}\\
+
+    File Type & \VAR{selected_analysis['full'] | filter_chars}\\
     \hline
-    MIME & \VAR{element['mime'] | filter_chars}\\
+
+    MIME & \VAR{selected_analysis['mime'] | filter_chars}\\
     \hline
-    Summary
-    \BLOCK{for data in element['summary']}
-    & \VAR{data | filter_chars}\\
-    \BLOCK{endfor}
-    \hline
+
+    \BLOCK{if selected_analysis['summary']}
+        Summary
+        \BLOCK{for data in selected_analysis['summary']}
+            & \VAR{data | filter_chars}\\
+        \BLOCK{endfor}
+        \hline
+    \BLOCK{endif}
 \end{tabular}

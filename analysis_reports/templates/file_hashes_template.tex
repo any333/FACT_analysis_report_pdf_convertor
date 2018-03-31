@@ -1,29 +1,38 @@
 \begin{tabular}{|p{3cm}|p{11.5cm}|}
     \hline
-    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    Time of Analysis & \VAR{selected_analysis['analysis_date'] | nice_unix_time}\\
     \hline
-    Plugin Version & \VAR{element['plugin_version']}\\
+
+    Plugin Version & \VAR{selected_analysis['plugin_version']}\\
     \hline
-    imphash & \VAR{element['imphash']}\\
+
+    imphash & \VAR{selected_analysis['imphash']}\\
     \hline
-    md5 & \VAR{element['md5']}\\
+
+    md5 & \VAR{selected_analysis['md5']}\\
     \hline
-    ripemd160 & \VAR{element['ripemd160']}\\
+
+    ripemd160 & \VAR{selected_analysis['ripemd160']}\\
     \hline
-    sha1 & \VAR{element['sha1']}\\
+
+    sha1 & \VAR{selected_analysis['sha1']}\\
     \hline
-    sha256 & \VAR{element['sha256']}\\
+
+    sha256 & \VAR{selected_analysis['sha256']}\\
     \hline
+
     \multicolumn{2}{|p{14.5cm}|}{sha512}\\
     \hline
-    \multicolumn{2}{|p{14.5cm}|}{\VAR{element['sha512']}}\\
+    \multicolumn{2}{|p{14.5cm}|}{\VAR{selected_analysis['sha512']}}\\
     \hline
+
     \multicolumn{2}{|p{14.5cm}|}{ssdeep}\\
     \hline
-    \multicolumn{2}{|p{14.5cm}|}{\VAR{element['ssdeep']}}\\
+    \multicolumn{2}{|p{14.5cm}|}{\VAR{selected_analysis['ssdeep']}}\\
     \hline
+
     \multicolumn{2}{|p{14.5cm}|}{whirlpool}\\
     \hline
-    \multicolumn{2}{|p{14.5cm}|}{\VAR{element['whirlpool']}}\\
+    \multicolumn{2}{|p{14.5cm}|}{\VAR{selected_analysis['whirlpool']}}\\
     \hline
 \end{tabular}

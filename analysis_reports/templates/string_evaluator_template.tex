@@ -1,9 +1,11 @@
 \begin{tabular}{|p{3cm}|p{11.5cm}|}
     \hline
-    Time of Analysis & \VAR{element['analysis_date'] | nice_unix_time}\\
+    Time of Analysis & \VAR{selected_analysis['analysis_date'] | nice_unix_time}\\
     \hline
-    Plugin Version & \VAR{element['plugin_version']}\\
+
+    Plugin Version & \VAR{selected_analysis['plugin_version']}\\
     \hline
-    string count & \VAR{element['string_eval'] | elements_count}\\
+
+    string count & \VAR{selected_analysis['string_eval'] | elements_count}\\
     \hline
 \end{tabular}

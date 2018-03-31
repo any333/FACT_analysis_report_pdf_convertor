@@ -3,12 +3,11 @@
 \usepackage{graphicx}
 \usepackage[ansinew]{inputenc}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
-\usepackage{verbatim}
 \usepackage{longtable}
 
 \begin{document}
 
-\title{Firmware Analysis of \VAR{meta_data['hid'] }}
+\title{Firmware Analysis of \VAR{meta_data['hid']}}
 
 \maketitle
 
@@ -18,45 +17,48 @@
 \section*{Analysis}
 
 \subsection*{base64decoder}
-\input{base64decoder.tex}
+\input{base64_decoder.tex}
+
+\subsection*{binwalk}
+\input{binwalk.tex}
 
 \subsection*{cpu architecture}
-\input{cpuarchitecture.tex}
+\input{cpu_architecture.tex}
 
 \subsection*{crypto material}
-\input{cryptomaterial.tex}
+\input{crypto_material.tex}
 
 \subsection*{exploit mitigations}
-\input{exploitmitigations.tex}
+\input{exploit_mitigations.tex}
 
 \subsection*{file hashes}
-\input{filehashes.tex}
+\input{file_hashes.tex}
 
 \subsection*{file type}
-\input{filetype.tex}
+\input{file_type.tex}
 
 \subsection*{init systems}
-\input{initsystems.tex}
+\input{init_systems.tex}
 
 \subsection*{ip and uri finder}
-\input{ipandurifinder.tex}
+\input{ip_and_uri_finder.tex}
 
 \subsection*{software components}
-\input{softwarecomponents.tex}
+\input{software_components.tex}
 
 \subsection*{printable strings}
-\input{printablestrings.tex}
+\input{printable_strings.tex}
 
 \subsection*{users and passwords}
-\input{usersandpasswords.tex}
+\input{users_and_passwords.tex}
 
 \subsection*{string evaluator}
-\input{stringevaluator.tex}
+\input{string_evaluator.tex}
 
 \subsection*{unpacker}
 \input{unpacker.tex}
 
 \subsection*{malware scanner}
-\input{malwarescanner.tex}
+\input{malware_scanner.tex}
 
 \end{document}
