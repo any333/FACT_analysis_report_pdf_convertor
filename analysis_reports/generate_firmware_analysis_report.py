@@ -25,6 +25,7 @@ latex_jinja_env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.abspath('.'))
 )
 
+
 def setup_jinja_filters():
     latex_jinja_env.filters['number_format'] = byte_number_filter
     latex_jinja_env.filters['nice_unix_time'] = nice_unix_time
@@ -34,37 +35,43 @@ def setup_jinja_filters():
     latex_jinja_env.filters['base64_to_png'] = convert_base64_to_png_filter
     latex_jinja_env.filters['check_list'] = check_if_list_empty
 
-def _make_get_requests(URL):
-    response = requests.get(URL)
+
+def _make_get_requests(url):
+    response = requests.get(url)
     response_data = response.text
     response_dict = json.loads(response_data)
+
     return response_dict
 
-firmware_data =_make_get_requests(GET_URL)
+
+firmware_data = _make_get_requests(GET_URL)
 meta_data = firmware_data['firmware']['meta_data']
 analysis = firmware_data['firmware']['analysis']
+
 
 def create_main_tex():
     template = latex_jinja_env.get_template('templates/main_template.tex')
 
-    maintexfile = template.render(meta_data=meta_data)
+    main_tex_file = template.render(meta_data=meta_data)
 
     fh = open("firmware_analysis_report.tex", 'w')
-    fh.write(maintexfile)
-    fh.close
+    fh.write(main_tex_file)
+    fh.close()
 
     pass
+
 
 def create_meta_tex():
     template = latex_jinja_env.get_template('templates/meta_data_template.tex')
 
-    maintexfile = template.render(meta_data=meta_data)
+    meta_tex_file = template.render(meta_data=meta_data)
 
     fh = open("meta.tex", 'w')
-    fh.write(maintexfile)
-    fh.close
+    fh.write(meta_tex_file)
+    fh.close()
 
     pass
+
 
 def create_analysis_texs():
     for processed_analysis in analysis:
@@ -75,14 +82,15 @@ def create_analysis_texs():
 
             template = latex_jinja_env.get_template('templates/' + processed_analysis + '_template.tex')
 
-            texfile = template.render(selected_analysis=selected_analysis)
+            analysis_tex_file = template.render(selected_analysis=selected_analysis)
 
             processed_texfile = processed_analysis + ".tex"
             fh = open(processed_texfile, 'w')
-            fh.write(texfile)
-            fh.close
+            fh.write(analysis_tex_file)
+            fh.close()
 
             pass
+
 
 setup_jinja_filters()
 create_main_tex()

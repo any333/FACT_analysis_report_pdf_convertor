@@ -1,6 +1,7 @@
 from common_helper_files import human_readable_file_size
-from time import localtime, strftime, struct_time
+from time import localtime, strftime
 from base64 import decodebytes
+
 
 def byte_number_filter(i, verbose=True):
     if isinstance(i, int) or isinstance(i, float):
@@ -10,6 +11,7 @@ def byte_number_filter(i, verbose=True):
             return human_readable_file_size(i)
     else:
         return 'not available'
+
 
 def nice_unix_time(unix_time_stamp):
     '''
@@ -22,6 +24,7 @@ def nice_unix_time(unix_time_stamp):
     else:
         return unix_time_stamp
 
+
 def nice_number_filter(i):
     if isinstance(i, int):
         return '{:,}'.format(i)
@@ -32,35 +35,38 @@ def nice_number_filter(i):
     else:
         return i
 
-def filter_latex_special_chars(input):
-    if "$" in input:
-        input = input.replace("$", "\$")
-    if "#" in input:
-        input = input.replace("#", "\#")
-    if "%" in input:
-        input = input.replace("%", "\%")
-    if "&" in input:
-        input = input.replace("&", "\&")
-    if "_" in input:
-        input = input.replace("_", "\_")
-    if "{" in input:
-        input = input.replace("{", "\{")
-    if "}" in input:
-        input = input.replace("}", "\}")
-    if "^" in input:
-        input = input.replace("^", "\\textasciicircum{}")
-    if "~" in input:
-        input = input.replace("~", "\\textasciitilde{}")
-    if ">" in input:
-        input = input.replace(">", "\\textgreater{}")
-    if "<" in input:
-        input = input.replace("<", "\\textless{}")
-    return input
 
-def count_elements_in_list(list):
-    return len(list)
+def filter_latex_special_chars(data):
+    if "$" in data:
+        data = data.replace("$", "\$")
+    if "#" in data:
+        data = data.replace("#", "\#")
+    if "%" in data:
+        data = data.replace("%", "\%")
+    if "&" in data:
+        data = data.replace("&", "\&")
+    if "_" in data:
+        data = data.replace("_", "\_")
+    if "{" in data:
+        data = data.replace("{", "\{")
+    if "}" in data:
+        data = data.replace("}", "\}")
+    if "^" in data:
+        data = data.replace("^", "\\textasciicircum{}")
+    if "~" in data:
+        data = data.replace("~", "\\textasciitilde{}")
+    if ">" in data:
+        data = data.replace(">", "\\textgreater{}")
+    if "<" in data:
+        data = data.replace("<", "\\textless{}")
+    return data
 
-def convert_base64_to_png_filter(s,filename):
+
+def count_elements_in_list(ls):
+    return len(ls)
+
+
+def convert_base64_to_png_filter(s, filename):
     base64_encoded = s.encode('utf-8')
     png_filename = filename + ".png"
     with open(png_filename, "wb") as fh:
@@ -68,13 +74,14 @@ def convert_base64_to_png_filter(s,filename):
 
     return png_filename
 
-def check_if_list_empty(list):
-    if list:
-        return list
+
+def check_if_list_empty(ls):
+    if ls:
+        return ls
     else:
-        empty_list = []
-        empty_list.append('list is empty')
-        return empty_list
+        empty_ls = ['list is empty']
+        return empty_ls
+
 
 '''
 def filter(texfile):
