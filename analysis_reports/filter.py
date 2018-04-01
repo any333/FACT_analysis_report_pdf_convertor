@@ -60,13 +60,13 @@ def filter_latex_special_chars(input):
 def count_elements_in_list(list):
     return len(list)
 
-def convert_base64_to_png_filter(s):
+def convert_base64_to_png_filter(s,filename):
     base64_encoded = s.encode('utf-8')
-    file_name = "entropy_analysis_graph.png"
-    with open(file_name, "wb") as fh:
+    png_filename = filename + ".png"
+    with open(png_filename, "wb") as fh:
         fh.write(decodebytes(base64_encoded))
 
-    return file_name
+    return png_filename
 
 def check_if_list_empty(list):
     if list:
