@@ -4,7 +4,7 @@ import jinja2
 import os
 import sys
 from filter import byte_number_filter, nice_unix_time, nice_number_filter, filter_latex_special_chars, \
-    count_elements_in_list, convert_base64_to_png_filter, check_if_list_empty
+    count_elements_in_list, convert_base64_to_png_filter, check_if_list_empty, split_hash
 
 HOST = "http://localhost:5000"
 PATH = "/rest/firmware/"
@@ -34,6 +34,7 @@ def setup_jinja_filters():
     latex_jinja_env.filters['elements_count'] = count_elements_in_list
     latex_jinja_env.filters['base64_to_png'] = convert_base64_to_png_filter
     latex_jinja_env.filters['check_list'] = check_if_list_empty
+    latex_jinja_env.filters['split_hash'] = split_hash
 
 
 def _make_get_requests(url):
@@ -79,6 +80,7 @@ def create_analysis_texs():
         selected_analysis = analysis[processed_analysis]
 
         if os.path.isfile('templates/' + processed_analysis + '_template.tex'):
+            #del selected_analysis['summary']
 
             template = latex_jinja_env.get_template('templates/' + processed_analysis + '_template.tex')
 
@@ -91,9 +93,24 @@ def create_analysis_texs():
 
             pass
 
+def delete_generated_files():
+    dir = "./"
+    dir_content = os.listdir(dir)
+
+    for file in dir_content:
+        if file.endswith(".tex"):
+            os.remove(os.path.join(dir, file))
+        elif file.endswith(".log"):
+            os.remove(os.path.join(dir, file))
+        elif file.endswith(".aux"):
+            os.remove(os.path.join(dir, file))
+
+    os.remove(os.path.join(dir, "entropy_analysis_graph.png"))
+
 
 setup_jinja_filters()
 create_main_tex()
 create_meta_tex()
 create_analysis_texs()
+#delete_generated_files()
 print("all .tex files successfully created")
