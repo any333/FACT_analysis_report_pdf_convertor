@@ -21,18 +21,12 @@
     sha256 & \VAR{selected_analysis['sha256']}\\
     \hline
 
-    \multicolumn{2}{|p{14.5cm}|}{sha512}\\
-    \hline
-    \multicolumn{2}{|p{14.5cm}|}{\VAR{selected_analysis['sha512']}}\\
+    sha512 & \VAR{selected_analysis['sha512'] | split_hash}\\
     \hline
 
-    \multicolumn{2}{|p{14.5cm}|}{ssdeep}\\
-    \hline
-    \multicolumn{2}{|p{14.5cm}|}{\VAR{selected_analysis['ssdeep']}}\\
+    ssdeep & \VAR{selected_analysis['ssdeep'] | split_hash}\\
     \hline
 
-    \multicolumn{2}{|p{14.5cm}|}{whirlpool}\\
-    \hline
-    \multicolumn{2}{|p{14.5cm}|}{\VAR{selected_analysis['whirlpool']}}\\
+    whirpool & \VAR{selected_analysis['whirlpool'] | split_hash}\\
     \hline
 \end{tabular}

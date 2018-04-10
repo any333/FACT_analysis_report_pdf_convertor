@@ -1,6 +1,6 @@
 \begin{longtable}{|p{3cm}|p{11.5cm}|}
     \hline
-    Time of Analysis & \VAR{selected_analysis['analysis_date'] | nice_unix_time}\\
+    Time of Analysis & \VAR{selected_analysis['analysis_date'] | nice_unix_time} \\
     \hline
 
     Plugin Version & \VAR{selected_analysis['plugin_version']}\\
@@ -8,26 +8,29 @@
 
     IPs v4
     \BLOCK{for ip in selected_analysis['ips_v4'] | check_list}
-        & \VAR{ip}\\
+        & \VAR{ip} \\
     \BLOCK{endfor}
     \hline
 
     IPs v6
     \BLOCK{for ip in selected_analysis['ips_v6'] | check_list}
-        & \VAR{ip}\\
+        & \VAR{ip} \\
     \BLOCK{endfor}
     \hline
 
     URIs
     \BLOCK{for uri in selected_analysis['uris'] | check_list}
-        & \VAR{uri}\\
+        & \VAR{uri} \\
     \BLOCK{endfor}
     \hline
 
     \BLOCK{if selected_analysis['summary']}
-        Summary
-        \BLOCK{for data in selected_analysis['summary']}
-            & \VAR{data | filter_chars}\\
+        \multicolumn{2}{|p{14.5cm}|}{Summary:} \\
+        \multicolumn{2}{|p{14.5cm}|}{} \\
+        \BLOCK{for selected_summary in selected_analysis['summary']}
+            \BLOCK{for data in selected_analysis['summary'][selected_summary]}
+                \multicolumn{2}{|p{14.5cm}|}{\VAR{selected_summary | filter_chars} :: \VAR{data | filter_chars}:\VAR{selected_analysis['summary'][selected_summary][data] | filter_chars}} \\
+            \BLOCK{endfor}
         \BLOCK{endfor}
         \hline
     \BLOCK{endif}
