@@ -37,20 +37,30 @@ def nice_number_filter(i):
 
 
 def filter_latex_special_chars(data):
+    if "\\" in data:
+        data = data.replace("\\", "")
     if "$" in data:
-        data = data.replace("$", "\$")
+        data = data.replace("$", "\\$")
+    if "(" in data:
+        data = data.replace("(", "$($")
+    if ")" in data:
+        data = data.replace(")", "$)$")
+    if "[" in data:
+        data = data.replace("[", "$[$")
+    if "]" in data:
+        data = data.replace("]", "$]$")
     if "#" in data:
-        data = data.replace("#", "\#")
+        data = data.replace("#", "\\#")
     if "%" in data:
-        data = data.replace("%", "\%")
+        data = data.replace("%", "\\%")
     if "&" in data:
-        data = data.replace("&", "\&")
+        data = data.replace("&", "\\&")
     if "_" in data:
-        data = data.replace("_", "\_")
+        data = data.replace("_", "\\_")
     if "{" in data:
-        data = data.replace("{", "\{")
+        data = data.replace("{", "\\{")
     if "}" in data:
-        data = data.replace("}", "\}")
+        data = data.replace("}", "\\}")
     if "^" in data:
         data = data.replace("^", "\\textasciicircum{}")
     if "~" in data:
@@ -59,6 +69,10 @@ def filter_latex_special_chars(data):
         data = data.replace(">", "\\textgreater{}")
     if "<" in data:
         data = data.replace("<", "\\textless{}")
+    if "\n" in data:
+        data = data.replace("\n", "\\newline ")
+    if "\'" in data:
+        data = data.replace("\'", "")
     return data
 
 
@@ -83,31 +97,7 @@ def check_if_list_empty(ls):
         return empty_ls
 
 
-'''
-def filter(texfile):
-    if "&" in texfile:
-        texfile = texfile.replace("&", "\&")
-
-    if "\r" in texfile:
-        texfile = texfile.replace("\r", "\\\r")
-
-    if "^" in texfile:
-        texfile = texfile.replace("^", "\string^")
-
-    if "\n\'" in texfile:
-        texfile = texfile.replace("\n\'", "")
-
-    if "#" in texfile:
-        texfile = texfile.replace("#", "\\#")
-
-    if "\\nchar" in texfile:
-        texfile = texfile.replace("\\nchar", "\\\\nchar")
-
-    if "\\nLSS" in texfile:
-        texfile = texfile.replace("\\nLSS", "\\\\nLSS")
-
-    if "\\@" in texfile:
-        texfile = texfile.replace("\\@", "\\\\@")
-
-    return texfile
-'''
+def split_hash(hash_value):
+    if len(hash_value) > 61:
+        hash_value = hash_value[:61] + ' ' + hash_value[61:]
+    return hash_value
