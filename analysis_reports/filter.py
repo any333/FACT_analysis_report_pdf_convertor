@@ -105,7 +105,7 @@ def split_hash(hash_value):
 
 def split_output_lines(output_value):
     splited_lines = output_value.splitlines()
-    output = ""
+    output = ''
 
     for line in splited_lines:
         line_length = len(line)
