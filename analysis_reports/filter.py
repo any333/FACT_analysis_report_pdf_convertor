@@ -101,3 +101,17 @@ def split_hash(hash_value):
     if len(hash_value) > 61:
         hash_value = hash_value[:61] + ' ' + hash_value[61:]
     return hash_value
+
+
+def split_output_lines(output_value):
+    splited_lines = output_value.splitlines()
+    output = ""
+
+    for line in splited_lines:
+        line_length = len(line)
+        # word_lengths.append(list(map(len, line.split(" "))))
+        if line_length > 92:
+            line = line[:92] + ' ' + line[92:]
+        output += line + "\n"
+
+    return output

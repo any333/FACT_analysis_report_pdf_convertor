@@ -5,7 +5,7 @@ import os
 import sys
 import argparse
 from filter import byte_number_filter, nice_unix_time, nice_number_filter, filter_latex_special_chars, \
-    count_elements_in_list, convert_base64_to_png_filter, check_if_list_empty, split_hash
+    count_elements_in_list, convert_base64_to_png_filter, check_if_list_empty, split_hash, split_output_lines
 
 
 latex_jinja_env = jinja2.Environment(
@@ -32,6 +32,7 @@ def setup_jinja_filters():
     latex_jinja_env.filters['base64_to_png'] = convert_base64_to_png_filter
     latex_jinja_env.filters['check_list'] = check_if_list_empty
     latex_jinja_env.filters['split_hash'] = split_hash
+    latex_jinja_env.filters['split_output_lines'] = split_output_lines
 
 
 def _make_get_requests(url):
@@ -156,6 +157,7 @@ def main():
         create_pdf_report(meta_data)
         delete_generated_files()
         print("Analysis report generated successfully.")
+
     else:
 
         FIRMWARE_UID = args.uid
