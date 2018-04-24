@@ -2,7 +2,6 @@ import json
 import requests
 import jinja2
 import os
-import sys
 import argparse
 from filter import byte_number_filter, nice_unix_time, nice_number_filter, filter_latex_special_chars, \
     count_elements_in_list, convert_base64_to_png_filter, check_if_list_empty, split_hash, split_output_lines
@@ -76,7 +75,8 @@ def create_analysis_texs(analysis):
         selected_analysis = analysis[processed_analysis]
 
         if os.path.isfile('templates/' + processed_analysis + '_template.tex'):
-            del selected_analysis['summary']
+            if 'summary' in selected_analysis:
+                del selected_analysis['summary']
 
             template = latex_jinja_env.get_template('templates/' + processed_analysis + '_template.tex')
 
@@ -135,9 +135,9 @@ def main():
     HOST = "http://localhost:5000"
     PATH = "/rest/firmware/"
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-s", dest="summary", action="store_false")
-    parser.add_argument("-uid", dest="uid")
+    parser = argparse.ArgumentParser(description='PDF Genearator for the Firmware Analysis and Comparison Tool (FACT)')
+    parser.add_argument('-s', '--summaries', help='create report including summaries', dest="summary", action="store_false")
+    parser.add_argument('-uid', '--uid', help='firmware analysis UID',dest="uid")
 
     args = parser.parse_args()
 
@@ -157,6 +157,7 @@ def main():
         create_pdf_report(meta_data)
         delete_generated_files()
         print("Analysis report generated successfully.")
+
 
     else:
 
