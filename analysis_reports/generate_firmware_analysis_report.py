@@ -42,10 +42,10 @@ def _make_get_requests(url):
     return response_dict
 
 
-def create_main_tex(meta_data):
+def create_main_tex(meta_data, analysis):
     template = latex_jinja_env.get_template('templates/main_template.tex')
 
-    main_tex_file = template.render(meta_data=meta_data)
+    main_tex_file = template.render(meta_data=meta_data, analysis = analysis)
     main_tex_file_name = meta_data['device_name']+"_Analysis_Report.tex"
     main_tex_file_name = main_tex_file_name.replace(" ", "_")
     main_tex_file_name = main_tex_file_name.replace("/", "__")
@@ -120,8 +120,8 @@ def delete_generated_files():
             os.remove(os.path.join(dir, file))
         elif file.endswith(".aux"):
             os.remove(os.path.join(dir, file))
-
-    os.remove(os.path.join(dir, "entropy_analysis_graph.png"))
+        elif os.path.splitext(os.path.basename(file))[0] == "entropy_analysis_graph":
+            os.remove(os.path.join(dir, "entropy_analysis_graph.png"))
 
 
 def create_pdf_report(meta_data):
@@ -151,7 +151,7 @@ def main():
         analysis = firmware_data['firmware']['analysis']
 
         setup_jinja_filters()
-        create_main_tex(meta_data)
+        create_main_tex(meta_data, analysis)
         create_meta_tex(meta_data)
         create_analysis_texs(analysis)
         create_pdf_report(meta_data)
@@ -169,7 +169,7 @@ def main():
         analysis = firmware_data['firmware']['analysis']
 
         setup_jinja_filters()
-        create_main_tex(meta_data)
+        create_main_tex(meta_data, analysis)
         create_meta_tex(meta_data)
         create_analysis_texs_with_summary(analysis)
         create_pdf_report(meta_data)
